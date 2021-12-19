@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "376244098595",
+    "project_id": "campustraveller-d8cc5",
+    "storage_bucket": "campustraveller-d8cc5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376244098595:android:9e97ea6e5a7b4f6e184396",
+        "android_client_info": {
+          "package_name": "com.seniorturkmen.campus_traveller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "376244098595-dd801r81jc5v9j17q9i0t0bq4k844u7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seniorturkmen.campus_traveller",
+            "certificate_hash": "7b68947c5feaa97263ebbd7de3807f2ba5d0f239"
+          }
+        },
+        {
+          "client_id": "376244098595-p0jql6v3mlp9kkj0t5257hd41o6garvk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seniorturkmen.campus_traveller",
+            "certificate_hash": "c58e485326829676d8c53297222d5224285c7e8b"
+          }
+        },
+        {
+          "client_id": "376244098595-n8j03iruso48rt8kc1eihpat084h0and.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsOONV3kWi-FoouhbfrpRFvdHZSGyHNrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "376244098595-n8j03iruso48rt8kc1eihpat084h0and.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "376244098595-is77btjfofe263apk4lt25i3q38allu3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.seniorturkmen.campusTraveller"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
