@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "376244098595",
+    "firebase_url": "https://campustraveller-d8cc5-default-rtdb.firebaseio.com",
     "project_id": "campustraveller-d8cc5",
     "storage_bucket": "campustraveller-d8cc5.appspot.com"
   },
@@ -14,19 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "376244098595-dd801r81jc5v9j17q9i0t0bq4k844u7o.apps.googleusercontent.com",
+          "client_id": "376244098595-0r7rmagspcsvvmm8le4j6qbjj17ca8c3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.seniorturkmen.campus_traveller",
             "certificate_hash": "7b68947c5feaa97263ebbd7de3807f2ba5d0f239"
-          }
-        },
-        {
-          "client_id": "376244098595-p0jql6v3mlp9kkj0t5257hd41o6garvk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.seniorturkmen.campus_traveller",
-            "certificate_hash": "c58e485326829676d8c53297222d5224285c7e8b"
           }
         },
         {
