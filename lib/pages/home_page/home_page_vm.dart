@@ -15,6 +15,7 @@ class HomeVm extends ChangeNotifier {
   late FirebaseFirestore fS;
   List<Location> locations = [];
   Location? _selected;
+  String? banner;
 
   Location get selected => _selected ?? locations[0];
 
@@ -43,9 +44,10 @@ class HomeVm extends ChangeNotifier {
   Future<void> getAllActions() async {
     var _dataOnFire = await fS.collection('actions').get();
     var _dataonFireLocation = await fS.collection('locations').get();
+    var _dataonFireBanner = await fS.collection('banner').get();
     actionsOnPage.clear();
     locations.clear();
-
+    banner = _dataonFireBanner.docs.first.data()['link'];
     for (var element in _dataOnFire.docs) {
       actionsOnPage.add(PageActions.fromMap(element.data()));
     }

@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
             GridView(
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3),
+                  crossAxisCount: 3, childAspectRatio: 2 / 1),
               children: value.actionsOnPage
                   .map((e) => _button(e.name, e.icon.icon!, e.color, () {
                         if (e.isWebViev) {
@@ -182,6 +182,27 @@ class _HomePageState extends State<HomePage> {
                       }))
                   .toList(),
             ),
+            if (value.banner != null) ...{
+              const SizedBox(
+                height: 36.0,
+              ),
+              Container(
+                  padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * .3,
+                    width: double.infinity,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Image.network(
+                        value.banner!,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  )),
+            },
+            const SizedBox(
+              height: 36.0,
+            ),
             Container(
               padding: const EdgeInsets.only(left: 24.0, right: 24.0),
               child: Column(
@@ -199,8 +220,10 @@ class _HomePageState extends State<HomePage> {
                         .map((e) => GestureDetector(
                               onTap: () => value.selectLocation(e),
                               child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25)),
                                 color: value.selected.name == e.name
-                                    ? Colors.red
+                                    ? Colors.yellow
                                     : Colors.white,
                                 child: SizedBox(
                                   height:
@@ -231,6 +254,7 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: action,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
             padding: const EdgeInsets.all(16.0),
