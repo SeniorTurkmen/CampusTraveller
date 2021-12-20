@@ -20,4 +20,11 @@ class UserModel {
         'userType': userType,
         'lastLogin': lastLogin.toIso8601String()
       };
+
+  factory UserModel.fromMap(Map<String, dynamic> map) => UserModel(
+      uid: map['uid'],
+      fullName: map['fullName'],
+      email: map['email'],
+      userType: map['userType'],
+      lastLogin: DateTime.parse(map['lastLogin']));
 }

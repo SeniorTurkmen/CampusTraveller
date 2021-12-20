@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../core/core.dart';
+import '../../core/models/location.dart';
 import '../pages.dart';
 import 'home_page_vm.dart';
 
@@ -19,9 +21,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final Completer<GoogleMapController> _controller = Completer();
-  final PanelController panelController = PanelController();
-
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.1660632, 38.9923299),
     zoom: 14.4746,
@@ -34,14 +33,6 @@ class _HomePageState extends State<HomePage> {
   double _fabHeight = 0;
   double _panelHeightOpen = 0;
   final double _panelHeightClosed = 95.0;
-
-  togglePanel() {
-    if (panelController.panelPosition < 0.5) {
-      panelController.open();
-    } else {
-      panelController.close();
-    }
-  }
 
   @override
   void initState() {
@@ -65,8 +56,13 @@ class _HomePageState extends State<HomePage> {
         return value.status == LoadingProcess.loading
             ? SizedBox(
                 height: MediaQuery.of(context).size.height,
-                child: Center(
-                  child: CircularProgressIndicator(),
+                child: const Center(
+                  child: SizedBox(
+                    height: 35,
+                    child: CircularProgressIndicator(
+                      color: Colors.grey,
+                    ),
+                  ),
                 ),
               )
             : Material(
@@ -74,12 +70,13 @@ class _HomePageState extends State<HomePage> {
                   alignment: Alignment.topCenter,
                   children: <Widget>[
                     SlidingUpPanel(
-                      controller: panelController,
+                      controller: value.panelController,
                       maxHeight: _panelHeightOpen,
                       minHeight: _panelHeightClosed,
                       parallaxEnabled: true,
                       parallaxOffset: .5,
-                      body: _body(),
+                      body: _body(value.controller, value.locations,
+                          value.selected, (item) => value.selectLocation(item)),
                       panelBuilder: (sc) => _panel(sc, value),
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(18.0),
@@ -133,7 +130,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 12.0,
             ),
-            dragHandle(),
+            dragHandle(value.togglePanel),
             const SizedBox(
               height: 18.0,
             ),
@@ -173,9 +170,10 @@ class _HomePageState extends State<HomePage> {
                                   builder: (_) => const AnouncePage()));
 
                               break;
-                            case 'more':
+                            case 'logout':
+                              FirebaseAuth.instance.signOut();
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => const MorePage()));
+                                  builder: (_) => const SignInPage()));
 
                               break;
                             default:
@@ -184,49 +182,45 @@ class _HomePageState extends State<HomePage> {
                       }))
                   .toList(),
             ),
-            const SizedBox(
-              height: 36.0,
-            ),
             Container(
               padding: const EdgeInsets.only(left: 24.0, right: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
-                  Text("Images",
+                children: <Widget>[
+                  const Text("Lokasyonlar",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                       )),
-                  SizedBox(
+                  const SizedBox(
                     height: 12.0,
+                  ),
+                  Column(
+                    children: value.locations
+                        .map((e) => GestureDetector(
+                              onTap: () => value.selectLocation(e),
+                              child: Card(
+                                color: value.selected.name == e.name
+                                    ? Colors.red
+                                    : Colors.white,
+                                child: SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * .04,
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.location_on),
+                                      Text(e.name)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ))
+                        .toList(),
                   ),
                 ],
               ),
             ),
             const SizedBox(
               height: 36.0,
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
-                  Text("About",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                      )),
-                  SizedBox(
-                    height: 12.0,
-                  ),
-                  Text(
-                    """Pittsburgh is a city in the state of Pennsylvania in the United States, and is the county seat of Allegheny County. A population of about 302,407 (2018) residents live within the city limits, making it the 66th-largest city in the U.S. The metropolitan population of 2,324,743 is the largest in both the Ohio Valley and Appalachia, the second-largest in Pennsylvania (behind Philadelphia), and the 27th-largest in the U.S.\n\nPittsburgh is located in the southwest of the state, at the confluence of the Allegheny, Monongahela, and Ohio rivers. Pittsburgh is known both as "the Steel City" for its more than 300 steel-related businesses and as the "City of Bridges" for its 446 bridges. The city features 30 skyscrapers, two inclined railways, a pre-revolutionary fortification and the Point State Park at the confluence of the rivers. The city developed as a vital link of the Atlantic coast and Midwest, as the mineral-rich Allegheny Mountains made the area coveted by the French and British empires, Virginians, Whiskey Rebels, and Civil War raiders.\n\nAside from steel, Pittsburgh has led in manufacturing of aluminum, glass, shipbuilding, petroleum, foods, sports, transportation, computing, autos, and electronics. For part of the 20th century, Pittsburgh was behind only New York City and Chicago in corporate headquarters employment; it had the most U.S. stockholders per capita. Deindustrialization in the 1970s and 80s laid off area blue-collar workers as steel and other heavy industries declined, and thousands of downtown white-collar workers also lost jobs when several Pittsburgh-based companies moved out. The population dropped from a peak of 675,000 in 1950 to 370,000 in 1990. However, this rich industrial history left the area with renowned museums, medical centers, parks, research centers, and a diverse cultural district.\n\nAfter the deindustrialization of the mid-20th century, Pittsburgh has transformed into a hub for the health care, education, and technology industries. Pittsburgh is a leader in the health care sector as the home to large medical providers such as University of Pittsburgh Medical Center (UPMC). The area is home to 68 colleges and universities, including research and development leaders Carnegie Mellon University and the University of Pittsburgh. Google, Apple Inc., Bosch, Facebook, Uber, Nokia, Autodesk, Amazon, Microsoft and IBM are among 1,600 technology firms generating \$20.7 billion in annual Pittsburgh payrolls. The area has served as the long-time federal agency headquarters for cyber defense, software engineering, robotics, energy research and the nuclear navy. The nation's eighth-largest bank, eight Fortune 500 companies, and six of the top 300 U.S. law firms make their global headquarters in the area, while RAND Corporation (RAND), BNY Mellon, Nova, FedEx, Bayer, and the National Institute for Occupational Safety and Health (NIOSH) have regional bases that helped Pittsburgh become the sixth-best area for U.S. job growth.
-                  """,
-                    softWrap: true,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 24,
             ),
           ],
         ));
@@ -263,9 +257,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _body() {
+  Widget _body(Completer _controller, List<Location> list, Location selected,
+      Function(Location) seter) {
     return GoogleMap(
       mapType: MapType.normal,
+      markers: list
+          .map((e) => Marker(
+                markerId: MarkerId(e.name),
+                position: LatLng(e.longtidue, e.latidute),
+                infoWindow: InfoWindow(title: e.name, snippet: e.name),
+                icon: e.name == selected.name
+                    ? BitmapDescriptor.defaultMarkerWithHue(50)
+                    : BitmapDescriptor.defaultMarkerWithHue(
+                        BitmapDescriptor.hueAzure),
+                consumeTapEvents: true,
+                onTap: () => seter(e),
+              ))
+          .toList()
+          .toSet(),
       initialCameraPosition: _kGooglePlex,
       myLocationEnabled: true,
       onMapCreated: (GoogleMapController controller) {
@@ -274,7 +283,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget dragHandle() => GestureDetector(
+  Widget dragHandle(Function() togglePanel) => GestureDetector(
         onTap: togglePanel,
         child: Center(
           child: Container(

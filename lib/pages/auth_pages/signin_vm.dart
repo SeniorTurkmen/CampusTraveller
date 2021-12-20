@@ -28,7 +28,9 @@ class SignInVm extends ChangeNotifier {
       status = LoadingProcess.loading;
       notifyListeners();
       await Future.delayed(const Duration(seconds: 3));
+
       if (fI.currentUser != null) {
+        updateUserState();
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const HomePage()),
@@ -51,15 +53,7 @@ class SignInVm extends ChangeNotifier {
 
       FirebaseMessaging.instance.getToken();
       log(_newUser.user!.email!);
-
-      var fireStore =
-          await fS.collection('users').doc(_newUser.user!.uid).get();
-
-      Map<String, dynamic> tempData = fireStore.data()!;
-      tempData['lastLogin'] = DateTime.now().toIso8601String();
-
-      fS.collection('users').doc(_newUser.user!.uid).update(tempData);
-
+      updateUserState();
       status = LoadingProcess.done;
       notifyListeners();
 
@@ -69,10 +63,12 @@ class SignInVm extends ChangeNotifier {
         ModalRoute.withName('/'),
       );
     } on FirebaseAuthException catch (e) {
+      log(e.toString());
       errorMsg = e.message!;
       status = LoadingProcess.error;
       notifyListeners();
     } catch (e) {
+      log(e.toString());
       errorMsg = e.toString();
       status = LoadingProcess.error;
       notifyListeners();
@@ -82,5 +78,17 @@ class SignInVm extends ChangeNotifier {
   changeVisiblity() {
     isVisible = !isVisible;
     notifyListeners();
+  }
+
+  updateUserState() async {
+    var fireStore = await fS.collection('users').doc(fI.currentUser!.uid).get();
+
+    Map<String, dynamic> tempData = fireStore.data()!;
+    tempData['lastLogin'] = DateTime.now().toIso8601String();
+    log(tempData.toString());
+
+    fS.collection('users').doc(fI.currentUser!.uid).update(tempData);
+
+    getIt<UserNotifier>().setCurrentUser(UserModel.fromMap(tempData));
   }
 }

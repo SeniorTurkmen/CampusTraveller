@@ -1,31 +1,26 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'core/const/color_consts.dart';
+import 'core/core.dart';
 import 'pages/pages.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  registerLocator();
 
-  runApp(const SlidingUpPanelExample());
+  runApp(const MyApp());
 }
 
-class SlidingUpPanelExample extends StatelessWidget {
-  const SlidingUpPanelExample({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.grey[200],
-      systemNavigationBarIconBrightness: Brightness.dark,
-      systemNavigationBarDividerColor: Colors.black,
-    ));
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'SlidingUpPanel Example',
+      title: 'Campus Traveller',
       theme: ThemeData(
         primarySwatch: ColorConst.mainColor,
       ),

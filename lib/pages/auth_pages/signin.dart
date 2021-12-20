@@ -168,6 +168,10 @@ class _SignInPageState extends State<SignInPage> {
                                   _passwordWidget(value.passwordController,
                                       value.isVisible, value.changeVisiblity),
                                   const SizedBox(height: 30),
+                                  if (value.errorMsg != '') ...{
+                                    _errorMessageSection(value.errorMsg),
+                                    const SizedBox(height: 20),
+                                  },
                                   _submitButton(value.signIn),
                                   SizedBox(height: height * .050),
                                   _createAccountLabel(),
@@ -182,6 +186,16 @@ class _SignInPageState extends State<SignInPage> {
           ),
         );
       }),
+    );
+  }
+
+  Widget _errorMessageSection(String errorMsg) {
+    return Align(
+      alignment: Alignment.center,
+      child: Text(
+        errorMsg,
+        style: TextStyle(color: Theme.of(context).errorColor),
+      ),
     );
   }
 }

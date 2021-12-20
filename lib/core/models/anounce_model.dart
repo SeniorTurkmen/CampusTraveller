@@ -2,11 +2,11 @@ import 'dart:math';
 
 class AnounceModel {
   final String detail;
-  final String? id;
+  final int id;
   final String? image;
   final String title;
-  final DateTime? date;
-  final String? anounceLink;
+  final DateTime date;
+  final String anounceLink;
 
   AnounceModel(
       {required this.detail,
@@ -28,7 +28,8 @@ class AnounceModel {
         'detail': detail,
         'id': Random().nextInt(999999),
         'date': DateTime.now().toIso8601String(),
-        'image': image ?? '',
+        'image': image ??
+            'http://owen.tuzitio.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png',
         'title': title,
         'anounce_link': anounceLink
       };

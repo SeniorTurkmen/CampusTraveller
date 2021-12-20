@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/core.dart';
+import '../../core/product/user_notifiers.dart';
 import '../pages.dart';
 
 class SignUpVm extends ChangeNotifier {
@@ -37,7 +38,6 @@ class SignUpVm extends ChangeNotifier {
       UserCredential _newUser = await fI.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
 
-      FirebaseMessaging.instance.getToken();
       log(_newUser.user!.email!);
 
       fS.collection('users').doc(_newUser.user!.uid).set(UserModel(
@@ -50,6 +50,11 @@ class SignUpVm extends ChangeNotifier {
 
       await fI.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
+
+      Map<String, dynamic> firestoreData =
+          (await fS.collection('users').doc(_newUser.user!.uid).get()).data()!;
+
+      getIt<UserNotifier>().setCurrentUser(UserModel.fromMap(firestoreData));
       status = LoadingProcess.done;
       notifyListeners();
 
