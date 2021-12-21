@@ -154,7 +154,12 @@ class _HomePageState extends State<HomePage> {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3, childAspectRatio: 2 / 1),
               children: value.actionsOnPage
-                  .map((e) => _button(e.name, e.icon.icon!, e.color, () {
+                  .map(
+                    (e) => _button(
+                      e.name,
+                      e.icon.icon!,
+                      e.color,
+                      () {
                         if (e.isWebViev) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) =>
@@ -179,7 +184,9 @@ class _HomePageState extends State<HomePage> {
                             default:
                           }
                         }
-                      }))
+                      },
+                    ),
+                  )
                   .toList(),
             ),
             if (value.banner != null) ...{
@@ -256,24 +263,23 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Icon(
-              icon,
-              color: Colors.white,
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(8),
+              child: Icon(
+                icon,
+                color: Colors.white,
+              ),
+              decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.15),
+                      blurRadius: 8.0,
+                    )
+                  ]),
             ),
-            decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromRGBO(0, 0, 0, 0.15),
-                    blurRadius: 8.0,
-                  )
-                ]),
-          ),
-          const SizedBox(
-            height: 12.0,
           ),
           Text(label),
         ],

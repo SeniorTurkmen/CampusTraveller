@@ -36,7 +36,7 @@ class SigninContainer extends StatelessWidget {
               ),
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 158, horizontal: 30),
-                child: Text('Welcome\nBack',
+                child: Text('Hoşgeldiniz',
                     textAlign: TextAlign.left,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(

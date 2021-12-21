@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "376244098595-ih1peu9hk1tpf0unl9q4cm0rjp6nncd6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seniorturkmen.campus_traveller",
+            "certificate_hash": "a0e7c21dded89ab7e6c8322a01aad21f623bbbfc"
+          }
+        },
+        {
           "client_id": "376244098595-n8j03iruso48rt8kc1eihpat084h0and.apps.googleusercontent.com",
           "client_type": 3
         }

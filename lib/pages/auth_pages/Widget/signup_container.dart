@@ -29,7 +29,7 @@ class SignUpContainer extends StatelessWidget {
             ),
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 150, horizontal: 20),
-              child: Text('Create \nAccount!',
+              child: Text('Hesap \n Oluştur!',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
