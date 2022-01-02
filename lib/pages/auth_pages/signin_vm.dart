@@ -31,10 +31,10 @@ class SignInVm extends ChangeNotifier {
 
       if (fI.currentUser != null) {
         updateUserState();
-        Navigator.pushAndRemoveUntil(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const HomePage()),
-          ModalRoute.withName('/'),
+          MaterialPageRoute(
+              builder: (BuildContext context) => const HomePage()),
         );
       }
       status = LoadingProcess.done;
@@ -57,10 +57,9 @@ class SignInVm extends ChangeNotifier {
       status = LoadingProcess.done;
       notifyListeners();
 
-      Navigator.pushAndRemoveUntil(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (BuildContext context) => const HomePage()),
-        ModalRoute.withName('/'),
       );
     } on FirebaseAuthException catch (e) {
       log(e.toString());

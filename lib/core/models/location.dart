@@ -16,7 +16,7 @@ class Location {
   factory Location.fromJson(Map<String, dynamic> json) => Location(
         longtidue: json["longtidue"].toDouble(),
         latidute: json["latidute"].toDouble(),
-        detail: json["detail"],
+        detail: json["detail"] ?? '',
         name: json["name"],
         image: json["image"],
       );
